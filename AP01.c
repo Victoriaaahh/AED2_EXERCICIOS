@@ -26,7 +26,7 @@ No* novoNo(int valor) {
 
 // função de inserção
 void inserir(int valor) {
-    No *novo = novoNo(valor);
+    No *novo = novoNo(valor); 
 
     if (inicio == NULL) {
         inicio = fim = novo;
@@ -47,13 +47,13 @@ void inserir(int valor) {
         return;
     }
 
-    int dist_inicio = abs(valor - inicio->id);
-    int dist_fim = abs(valor - fim->id);
+    int d_cabeca = abs(valor - inicio->id);
+    int d_final = abs(valor - fim->id);
 
     No *atual;
     int nep = 0;
 
-    if (dist_inicio <= dist_fim) {
+    if (d_cabeca <= d_final) {
         atual = inicio;
 
         while (atual->prox != NULL) {
