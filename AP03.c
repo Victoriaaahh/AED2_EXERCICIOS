@@ -6,16 +6,17 @@ typedef struct {
     int gravidade;
 } Paciente;
 
-long long swaps = 0;
+//troca começa em 0
+long long swap = 0;
 
-// Função de prioridade
+//prioridade
 int prioridade(Paciente a, Paciente b) {
     if (a.gravidade > b.gravidade) return 1;
     if (a.gravidade < b.gravidade) return 0;
     return a.id < b.id;
 }
 
-// Swap com regras do enunciado
+// swap
 void trocar(Paciente *A, int i, int j) {
     if (i == j) return;
 
@@ -26,50 +27,50 @@ void trocar(Paciente *A, int i, int j) {
     A[i] = A[j];
     A[j] = temp;
 
-    swaps++;
+    swap++;
 }
 
-// Mediana de 3
-void medianaDeTres(Paciente *A, int p, int r) {
-    int mid = p + (r - p) / 2;
+// mediana 
+void mediana(Paciente *A, int p, int r) {
+    int meio = p + (r - p) / 2;
 
-    if (prioridade(A[mid], A[p]))
-        trocar(A, mid, p);
+    if (prioridade(A[meio], A[p]))
+        trocar(A, meio, p);
 
     if (prioridade(A[r], A[p]))
         trocar(A, r, p);
 
-    if (prioridade(A[r], A[mid]))
-        trocar(A, r, mid);
+    if (prioridade(A[r], A[meio]))
+        trocar(A, r, meio);
 
-    // coloca mediana no final
-    trocar(A, mid, r);
+    // essa função bota a mediana no final
+    trocar(A, meio, r);
 }
 
-// Partição (Lomuto adaptado)
-int particao(Paciente *A, int p, int r) {
-    medianaDeTres(A, p, r);
+// partição 
+int particao(Paciente *A, int p, int v) {
+    mediana(A, p, v);
 
-    Paciente pivo = A[r];
+    Paciente pivo = A[v];
     int i = p - 1;
 
-    for (int j = p; j < r; j++) {
+    for (int j = p; j < v; j++) {
         if (prioridade(A[j], pivo)) {
             i++;
             trocar(A, i, j);
         }
     }
 
-    trocar(A, i + 1, r);
+    trocar(A, i + 1, v);
     return i + 1;
 }
 
-// QuickSort
-void quicksort(Paciente *A, int p, int r) {
-    if (p < r) {
-        int q = particao(A, p, r);
+// quicksort
+void quicksort(Paciente *A, int p, int v) {
+    if (p < v) {
+        int q = particao(A, p, v);
         quicksort(A, p, q - 1);
-        quicksort(A, q + 1, r);
+        quicksort(A, q + 1, v);
     }
 }
 
@@ -85,12 +86,12 @@ int main() {
 
     quicksort(A, 0, N - 1);
 
-    // saída: apenas IDs
+    // sai os ids com prioridade
     for (int i = 0; i < N; i++) {
         printf("%d\n", A[i].id);
     }
 
-    printf("Swaps: %lld\n", swaps);
+    printf("Swaps: %lld\n", swap);
 
     free(A);
     return 0;
